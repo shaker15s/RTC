@@ -6,7 +6,7 @@ import { ANIMATION_CONFIG } from '@/lib/data';
 
 export default function TransitionScribble() {
     useEffect(() => {
-        const logoTruusClickable = document.querySelector('.logo-truus');
+        const logoTruusClickable = document.querySelector('.logo-rtc');
         const transitionScribblePath = document.querySelector('.transition-scribble path');
         const transitionScribbleSvg = document.querySelector('.transition-scribble');
 
@@ -41,7 +41,7 @@ export default function TransitionScribble() {
                 transitionLogo = document.createElement('div');
                 transitionLogo.className = 'transition-logo';
                 transitionLogo.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:10000; pointer-events:none; opacity:0; display:flex; justify-content:center; align-items:center; transition: color 0.1s;';
-                const svgClone = document.querySelector('.logo-truus').cloneNode(true);
+                const svgClone = document.querySelector('.logo-rtc').cloneNode(true);
                 svgClone.style.width = '150px';
                 svgClone.style.height = 'auto';
                 transitionLogo.appendChild(svgClone);

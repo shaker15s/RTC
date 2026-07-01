@@ -1,33 +1,219 @@
-/* ─── Showreel Section ───────────────────────────────────────────────────── */
+/* ─── Showreel Section — Impact Numbers Band ────────────────────────────────── */
 .showreel-section {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    background-color: var(--color-black-deep);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--color-black-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
-.showreel__content {
-    text-align: center;
+.showreel__inner {
+  width: 100%;
+  max-width: 1400px;
+  padding: 8rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
 }
 
-.showreel__title {
-    font-family: 'Epilogue', sans-serif;
-    font-size: 5rem;
-    font-weight: 900;
-    letter-spacing: -3px;
-    color: var(--color-white);
-    margin-bottom: 1rem;
+.showreel__intro {
+  text-align: center;
 }
 
-.showreel__subtitle {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.4);
-    letter-spacing: 2px;
-    text-transform: uppercase;
+.showreel__eyebrow {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-green);
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.showreel__intro-title {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.1;
+  letter-spacing: 0;
+  color: var(--color-white);
+}
+
+.showreel__intro-title-en {
+  display: block;
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  letter-spacing: -0.01em;
+  opacity: 0.6;
+  margin-top: 0.5rem;
+  color: var(--color-white);
+}
+
+.showreel__stats {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .showreel__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .showreel__stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.showreel__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  padding: 1.5rem 1rem;
+  position: relative;
+}
+
+.showreel__stat::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-green), transparent);
+  opacity: 0.4;
+}
+
+.showreel__stat-value {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 900;
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--color-white);
+  text-shadow: 0 0 40px rgba(46, 139, 87, 0.3);
+}
+
+.showreel__stat-labels {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.showreel__stat-label-ar {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--color-white);
+  letter-spacing: -0.01em;
+}
+
+.showreel__stat-label-en {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 400;
+  font-size: 0.85rem;
+  letter-spacing: -0.01em;
+  opacity: 0.55;
+  color: var(--color-white);
+  text-transform: uppercase;
+}
+
+.showreel__footer-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  position: relative;
+}
+
+.showreel__footer-line::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+}
+
+.showreel__footer-mark {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--color-green);
+}
+
+.showreel__footer-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-green);
+  box-shadow: 0 0 15px var(--color-green);
+  animation: showreel-pulse 2s ease-in-out infinite;
+}
+
+@keyframes showreel-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.showreel__footer-tag {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  opacity: 0.5;
+  color: var(--color-white);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .showreel__footer-dot {
+    animation: none;
+  }
+}
+
+.showreel__stat {
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.showreel__stat:hover {
+  transform: translateY(-5px);
+}
+
+.showreel__stat::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 3px;
+  background: var(--color-green);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.3s ease, width 0.3s ease;
+}
+
+.showreel__stat:hover::after {
+  opacity: 1;
+  width: 60px;
 }

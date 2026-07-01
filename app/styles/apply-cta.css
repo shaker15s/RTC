@@ -1,0 +1,123 @@
+/* ─── Apply CTA — Registration Section ──────────────────────────────────────── */
+.apply-cta {
+  background-color: var(--color-green);
+  padding: 100px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.apply-cta__content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.apply-cta h2 {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--color-white);
+  line-height: 1.2;
+  margin-bottom: 24px;
+  letter-spacing: 0;
+}
+
+.apply-cta p {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 1.3rem;
+  color: var(--color-white);
+  opacity: 0.95;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.apply-cta__actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.apply-cta__btn {
+  display: inline-block;
+  padding: 18px 40px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--color-darkblue);
+  background: var(--color-white);
+  border-radius: 50px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+  letter-spacing: 0;
+}
+
+.apply-cta__btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.apply-cta__btn--secondary {
+  background: transparent;
+  color: var(--color-white);
+  border: 2px solid var(--color-white);
+}
+
+.apply-cta__btn--secondary:hover {
+  background: var(--color-white);
+  color: var(--color-darkblue);
+}
+
+@media (max-width: 768px) {
+  .apply-cta {
+    padding: 70px 24px;
+  }
+
+  .apply-cta h2 {
+    font-size: 2.5rem;
+  }
+
+  .apply-cta p {
+    font-size: 1.1rem;
+  }
+
+  .apply-cta__actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .apply-cta__btn {
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .apply-cta__btn {
+    transition: none;
+  }
+}
+
+/* ─── Small phones (≤ 380px) ──────────────────────────────────────────────── */
+@media (max-width: 380px) {
+  .apply-cta {
+    padding: 56px 16px;
+  }
+
+  .apply-cta h2 {
+    font-size: 2rem;
+    margin-bottom: 16px;
+  }
+
+  .apply-cta p {
+    font-size: 1rem;
+  }
+
+  .apply-cta__btn {
+    min-height: 48px;
+    padding: 14px 20px;
+    font-size: 1rem;
+  }
+}
