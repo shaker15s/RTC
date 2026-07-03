@@ -309,16 +309,20 @@
     font-size: 1.1rem;
   }
 
-  /* Full-width horizontal marquee strip */
+  /* Full-width horizontal marquee strip — full-bleed technique */
   .marquee-right {
     display: block;
+    /* Full-bleed: break out of any parent padding */
     width: 100vw;
     max-width: 100vw !important;
-    height: auto;
-    margin-left: 0;
-    padding: 0;
-    overflow: hidden;
     position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    height: auto;
+    overflow: hidden;
+    padding: 0;
   }
 
   /* Fade edges */
@@ -346,11 +350,11 @@
     display: none;
   }
 
-  /* First column becomes horizontal scrolling strip */
+  /* First column — full width, no clip (let marquee-right clip it) */
   .marquee-column:nth-child(1) {
     display: block;
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .marquee-column::before,
