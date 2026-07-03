@@ -310,17 +310,11 @@
     font-size: 1.1rem;
   }
 
-  /* Full-width horizontal marquee strip — full-bleed technique */
+  /* Full-width horizontal marquee strip */
   .marquee-right {
     display: block;
-    /* Full-bleed: break out of any parent padding */
-    width: 100vw;
-    max-width: 100vw !important;
+    width: 100%; /* Parent has 0 horizontal padding, so 100% is full screen */
     position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
     height: auto;
     overflow: hidden;
     padding: 0;
