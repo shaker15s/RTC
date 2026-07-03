@@ -27,16 +27,29 @@
 }
 
 .motion-card__subtitle {
-  font-family: 'Epilogue', sans-serif;
-  font-style: italic;
+  font-family: 'Tajawal', 'Epilogue', sans-serif;
+  font-style: normal;
   font-weight: 400;
-  font-size: 7.5rem;
-  line-height: 1.15;
+  font-size: 2.6rem;
+  line-height: 1.2;
   letter-spacing: 0;
   color: var(--color-dark);
   position: relative;
-  display: inline-block;
-  top: -30px;
+  display: block;
+  margin-top: 24px;
+}
+
+/* English subtitle — smaller accent underneath the Arabic line */
+.motion-card__subtitle-en {
+  display: block;
+  font-family: 'Epilogue', sans-serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.5rem;
+  opacity: 0.6;
+  letter-spacing: -0.01em;
+  margin-top: 6px;
+  unicode-bidi: isolate;
 }
 
 .motion-card__sticker {
@@ -56,7 +69,7 @@
 .motion-card__underline-svg {
   display: block;
   max-width: 720px;
-  margin: -45px auto 0;
+  margin: 16px auto 0;
   color: var(--color-dark);
   height: auto;
 }
@@ -181,6 +194,40 @@
   left: -3.5rem;
 }
 
+/* ─── Card Badges ─────────────────────────────────────────────────────────── */
+.motion-card__badge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 3;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.motion-card__badge-ar {
+  font-family: 'Tajawal', 'Epilogue', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-white);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  text-align: right;
+}
+
+.motion-card__badge-en {
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 500;
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  opacity: 0.7;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  unicode-bidi: isolate;
+}
+
 /* ─── Floating Labels ────────────────────────────────────────────────────── */
 .motion-card__floating-labels {
   position: absolute;
@@ -209,10 +256,24 @@
 .motion-card__floating-text {
   pointer-events: none;
   margin: 0;
-  font-family: 'Epilogue', sans-serif;
+  font-family: 'Tajawal', 'Epilogue', sans-serif;
   font-size: 1rem;
   font-weight: 450;
   color: var(--color-dark);
+}
+
+/* English floating text — smaller accent */
+.motion-card__floating-text-en {
+  pointer-events: none;
+  margin: 2px 0 0;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  opacity: 0.6;
+  color: var(--color-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  unicode-bidi: isolate;
 }
 
 .motion-card__floating-label--pink {
@@ -241,12 +302,26 @@
 }
 
 .motion-card__description {
-  font-family: 'Epilogue', sans-serif;
+  font-family: 'Tajawal', 'Epilogue', sans-serif;
   font-size: 1.3rem;
   font-weight: 400;
   line-height: 1.7;
   color: var(--color-dark);
   letter-spacing: 0;
+  cursor: url("/assets/Cursor SVG/cursor-text.svg") 12 12, auto;
+}
+
+/* English description — accent line */
+.motion-card__description-en {
+  font-family: 'Epilogue', sans-serif;
+  font-style: italic;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-dark);
+  opacity: 0.6;
+  margin-top: 6px;
+  unicode-bidi: isolate;
   cursor: url("/assets/Cursor SVG/cursor-text.svg") 12 12, auto;
 }
 
@@ -300,6 +375,10 @@
     top: -10px;
   }
 
+  .motion-card__subtitle-en {
+    font-size: 0.9rem;
+  }
+
   .motion-card__sticker--top {
     top: -10px;
     right: -10px;
@@ -342,6 +421,10 @@
     font-size: 1rem;
     padding: 0 12px;
   }
+
+  .motion-card__description-en {
+    font-size: 0.8rem;
+  }
 }
 
 /* ─── Responsive: Tablet (769px – 1200px) ────────────────────────────────── */
@@ -351,8 +434,20 @@
   }
 
   .motion-card__subtitle {
-    font-size: clamp(3rem, 5.5vw, 5.5rem);
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
     top: -20px;
+  }
+
+  .motion-card__subtitle-en {
+    font-size: clamp(0.85rem, 1.4vw, 1.2rem);
+  }
+
+  .motion-card__description {
+    font-size: 1.1rem;
+  }
+
+  .motion-card__description-en {
+    font-size: 0.85rem;
   }
 
   .motion-card__card {

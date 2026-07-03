@@ -3,13 +3,22 @@
   position: relative;
   width: 100%;
   max-width: 1400px;
-  height: 650px;
+  height: 600px;
+  min-height: 500px;
   margin: 100px auto;
   padding: 0 80px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: url("/assets/Cursor SVG/cursor-text.svg") 12 12, auto;
+  overflow: visible;
+}
+
+@media (max-width: 1300px) {
+  .cards-wrapper {
+    height: 560px;
+    padding: 0 40px;
+  }
 }
 
 /* ─── Base Card ──────────────────────────────────────────────────────────── */
@@ -28,6 +37,15 @@
   color: var(--color-white);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   transform-origin: center center;
+  overflow: visible;
+  will-change: transform;
+  transition: box-shadow 0.3s ease;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.card:hover {
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
 }
 
 .card-title {
@@ -41,24 +59,25 @@
   color: var(--color-white);
 }
 
-.card-title__en {
-  font-family: 'Epilogue', sans-serif;
+.card-title__ar {
+  font-family: 'Tajawal', 'Epilogue', sans-serif;
   font-weight: 900;
-  font-size: 2.4rem;
-  line-height: 1;
-  letter-spacing: -0.02em;
+  font-size: 2.2rem;
+  line-height: 1.1;
+  letter-spacing: 0;
   display: block;
 }
 
-.card-title__sub {
+.card-title__en {
   font-family: 'Epilogue', sans-serif;
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 0.9rem;
   opacity: 0.78;
   letter-spacing: 0;
   text-transform: uppercase;
   display: block;
   margin-top: 4px;
+  unicode-bidi: isolate;
 }
 
 /* Light card variants get dark title */
@@ -79,11 +98,14 @@
 /* ─── Card Color Variants ─────────────────────────────────────────────────── */
 /* Layout: 4 cards fanned across a 1400px wrapper.
    Card width = 320px, gap target = ~50px between cards.
-   Darkblue (center) anchored at 50% - 160px; others fan left/right from there. */
+   Darkblue (center) anchored at 50% - 160px; others fan left/right from there.
+   Fallback: at viewports < 1300px the fanned layout compresses via clamp()
+   so cards never overflow the wrapper edges. Below 1100px the responsive.css
+   media query switches to a 2-column relative grid. */
 .card-darkblue {
   background-color: var(--color-lightblue);
   color: var(--color-dark);
-  left: calc(50% - 160px);
+  left: clamp(40px, calc(50% - 480px), calc(50% - 300px));
   top: 30px;
   transform: rotate(-2deg);
   z-index: 4;
@@ -91,7 +113,7 @@
 
 .card-green {
   background-color: var(--color-green);
-  left: calc(50% - 480px);
+  left: calc(50% - 160px);
   top: 70px;
   transform: rotate(4deg);
   z-index: 1;
@@ -99,7 +121,9 @@
 
 .card-maroon {
   background-color: var(--color-maroon);
-  left: calc(50% + 170px);
+  /* At 1300px: 650+170=820px. At 1100px: 550+170=720px.
+     clamp(..., calc(100% - 360px)) keeps right edge inside wrapper. */
+  left: clamp(calc(50% + 80px), calc(50% + 170px), calc(100% - 360px));
   top: 70px;
   transform: rotate(5deg);
   z-index: 2;
@@ -108,7 +132,9 @@
 .card-orange {
   background-color: var(--color-orange);
   color: var(--color-dark);
-  left: calc(50% + 380px);
+  /* At 1300px: 650+380=1030px. At 1100px: 550+380=930px.
+     clamp keeps right edge inside wrapper. */
+  left: clamp(calc(50% + 200px), calc(50% + 380px), calc(100% - 340px));
   top: 30px;
   transform: rotate(-8deg);
   z-index: 3;
@@ -150,7 +176,7 @@
 }
 
 .card-list__service {
-  font-family: 'Epilogue', sans-serif;
+  font-family: 'Tajawal', 'Epilogue', sans-serif;
 }
 
 .services-card__bullet-svg {
@@ -171,14 +197,26 @@
 }
 
 .main-title__sub {
-  font-family: 'Epilogue', sans-serif;
-  font-style: italic;
+  font-family: 'Tajawal', 'Epilogue', sans-serif;
+  font-style: normal;
   font-weight: 500;
   color: var(--color-dark);
   opacity: 0.7;
   text-align: center;
   margin-top: 6px;
   font-size: 1.2rem;
+}
+
+/* English subtitle — accent line below Arabic */
+.main-title__sub-en {
+  display: block;
+  font-family: 'Epilogue', sans-serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.9rem;
+  opacity: 0.55;
+  margin-top: 4px;
+  unicode-bidi: isolate;
 }
 
 /* ─── Card Stickers ──────────────────────────────────────────────────────── */
@@ -232,4 +270,8 @@
   top: -50px;
   right: 15px;
   transform: rotate(1deg);
+}
+
+.card * {
+  pointer-events: none;
 }

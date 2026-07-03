@@ -13,7 +13,12 @@ export default function VimeoHero() {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(Boolean(document.fullscreenElement));
+    document.addEventListener('fullscreenchange', onFsChange);
+    return () => document.removeEventListener('fullscreenchange', onFsChange);
+  }, []);
 
   useEffect(() => {
     const bubble = bubbleRef.current;
@@ -182,17 +187,23 @@ export default function VimeoHero() {
           loop
           muted
           playsInline
+          preload="auto"
+          poster="/assets/VimeoHero SVG/hero-poster.jpg"
           className="vimeo-hero__iframe"
           style={{ objectFit: 'cover', backgroundColor: '#111' }}
-        />
+        >
+          <source src="/assets/videos/hero-bg.webm" type="video/webm" />
+          <source src="/assets/videos/hero-bg.mp4" type="video/mp4" />
+        </video>
 
         <div className="vimeo-hero__fade" />
 
         <div className="home-header__title">
           <h1 className="vimeo-hero__title" ref={titleRef} onClick={(e) => e.stopPropagation()}>
-            <span className="vimeo-hero__word vimeo-hero__word--ar">Free. </span>
-            <span className="vimeo-hero__word vimeo-hero__word--ar is--relative">
-              <span>Trained. </span>
+            {/* Arabic rhythm — locked spec */}
+            <span className="vimeo-hero__word vimeo-hero__word--ar" lang="ar" dir="rtl">مجاني.</span>
+            <span className="vimeo-hero__word vimeo-hero__word--ar is--relative" lang="ar" dir="rtl">
+              <span>تطوير.</span>
               <div className="home-header__smiley" aria-hidden="true">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M5 19c4-1 7-4 9-9 1-3 1-6 1-7-2 0-5 0-8 2-3 2-5 5-5 8 0 2 1 4 3 6z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
@@ -200,12 +211,15 @@ export default function VimeoHero() {
                 </svg>
               </div>
             </span>
-            <span className="vimeo-hero__word vimeo-hero__word--ar"><em>Employed.</em></span>
+            <span className="vimeo-hero__word vimeo-hero__word--ar" lang="ar" dir="rtl"><em>هدف.</em></span>
           </h1>
 
           <div className="vimeo-hero__subtitle-block">
-            <p className="vimeo-hero__subtitle">
+            <p className="vimeo-hero__subtitle" lang="en" dir="ltr">
               Free professional courses. Every month. Every young Egyptian.
+            </p>
+            <p className="vimeo-hero__accent-en" lang="en" dir="ltr">
+              for the youth of Egypt
             </p>
             <div className="vimeo-hero__cta-row">
               <a

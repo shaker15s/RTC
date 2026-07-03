@@ -4,57 +4,93 @@ import { useEffect } from 'react';
 import { gsap } from 'gsap';
 
 export default function CursorBubble() {
-    useEffect(() => {
-        const cursorBubble = document.querySelector('.cursor-bubble');
-        if (!cursorBubble) return;
+  useEffect(() => {
+    const cursorBubble = document.querySelector('.cursor-bubble');
+    const bubbleText = cursorBubble?.querySelector('.cursor-bubble__text');
+    if (!cursorBubble || !bubbleText) return;
 
-        const xTo = gsap.quickTo(cursorBubble, 'x', { duration: 0.5, ease: 'power3' });
-        const yTo = gsap.quickTo(cursorBubble, 'y', { duration: 0.5, ease: 'power3' });
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      cursorBubble.style.display = 'none';
+      document.documentElement.classList.add('cursor-disabled');
+      return;
+    }
 
-        let isHoveringClickable = false;
-        gsap.set(cursorBubble, { rotation: -30 });
+    const xTo = gsap.quickTo(cursorBubble, 'x', { duration: 0.5, ease: 'power3' });
+    const yTo = gsap.quickTo(cursorBubble, 'y', { duration: 0.5, ease: 'power3' });
 
-        const onMouseMove = (e) => {
-            xTo(e.clientX + 13);
-            yTo(e.clientY - 43);
-        };
+    let isHoveringClickable = false;
+    let bubbleWidth = 0;
+    let bubbleHeight = 0;
+    gsap.set(cursorBubble, { rotation: -30 });
 
-        const onMouseOver = (e) => {
-            const targetSelector = '.footer-column h3, .footer-map-link span, .footer-email, .footer-whatsapp, .single-social, .logo-rtc, .nav-work-btn';
-            const found = e.target.closest(targetSelector);
+    const updateBubbleSize = () => {
+      bubbleWidth = cursorBubble.offsetWidth || 80;
+      bubbleHeight = cursorBubble.offsetHeight || 30;
+    };
 
-            if (found && !isHoveringClickable) {
-                isHoveringClickable = true;
-                if (found.matches('.logo-rtc')) cursorBubble.textContent = 'to home';
-                else if (found.matches('.nav-work-btn')) cursorBubble.textContent = 'click';
-                else cursorBubble.textContent = 'click';
-                gsap.killTweensOf(cursorBubble, 'opacity,scale,rotation');
-                gsap.to(cursorBubble, { opacity: 1, scale: 1, rotation: 0, duration: 1.7, delay: 0.1, ease: 'elastic.out(1, 0.4)' });
-            } else if (!found && isHoveringClickable) {
-                isHoveringClickable = false;
-                gsap.killTweensOf(cursorBubble, 'opacity,scale,rotation');
-                gsap.to(cursorBubble, { opacity: 1, scale: 0, rotation: -30, duration: 0.3, ease: 'sine.inOut' });
-            }
-        };
+    const getClampedPos = (clientX, clientY) => {
+      updateBubbleSize();
+      const x = Math.max(4, Math.min(clientX + 14, window.innerWidth - bubbleWidth - 4));
+      const y = Math.max(4, Math.min(clientY - bubbleHeight - 6, window.innerHeight - bubbleHeight - 4));
+      return { x, y };
+    };
 
-        const onMouseLeave = () => {
-            if (isHoveringClickable) {
-                isHoveringClickable = false;
-                gsap.killTweensOf(cursorBubble, 'opacity,scale,rotation');
-                gsap.to(cursorBubble, { opacity: 1, scale: 0, rotation: -30, duration: 0.3, ease: 'sine.inOut' });
-            }
-        };
+    const showBubble = (text, clientX, clientY) => {
+      if (!isHoveringClickable) {
+        isHoveringClickable = true;
+        bubbleText.textContent = text;
+        gsap.killTweensOf(cursorBubble);
+        gsap.set(cursorBubble, { opacity: 0, scale: 0, rotation: -30 });
+        const { x, y } = getClampedPos(clientX, clientY);
+        gsap.to(cursorBubble, { opacity: 1, x, y, scale: 1, rotation: 0, duration: 1.7, delay: 0.1, ease: 'elastic.out(1, 0.4)' });
+      }
+    };
 
-        window.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseover', onMouseOver);
-        document.addEventListener('mouseleave', onMouseLeave);
+    const moveBubble = (clientX, clientY) => {
+      if (!isHoveringClickable) return;
+      const { x, y } = getClampedPos(clientX, clientY);
+      xTo(x);
+      yTo(y);
+    };
 
-        return () => {
-            window.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseover', onMouseOver);
-            document.removeEventListener('mouseleave', onMouseLeave);
-        };
-    }, []);
+    const hideBubble = () => {
+      if (isHoveringClickable) {
+        isHoveringClickable = false;
+        gsap.killTweensOf(cursorBubble);
+        gsap.to(cursorBubble, { opacity: 0, scale: 0, rotation: -30, duration: 0.3, ease: 'sine.inOut' });
+      }
+    };
 
-    return <div className="cursor-bubble">click</div>;
+    const onMouseMove = (e) => {
+      moveBubble(e.clientX, e.clientY);
+    };
+
+    let hideTimeout = null;
+    const onMouseOver = (e) => {
+      if (hideTimeout) { clearTimeout(hideTimeout); hideTimeout = null; }
+      const found = e.target.closest('[data-cursor]');
+      if (found) {
+        showBubble(found.dataset.cursor || 'click', e.clientX, e.clientY);
+      } else {
+        hideBubble();
+      }
+    };
+
+    const onMouseLeaveWindow = () => {
+      hideBubble();
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseover', onMouseOver);
+    document.addEventListener('mouseleave', onMouseLeaveWindow);
+
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseover', onMouseOver);
+      document.removeEventListener('mouseleave', onMouseLeaveWindow);
+      if (hideTimeout) clearTimeout(hideTimeout);
+    };
+  }, []);
+
+  return <div className="cursor-bubble"><span className="cursor-bubble__text">click</span></div>;
 }

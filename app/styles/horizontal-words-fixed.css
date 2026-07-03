@@ -10,7 +10,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  direction: ltr !important;
 }
 
 /* Container for text and arrows - uses flexbox for proper alignment */
@@ -29,14 +28,15 @@
 
 /* ─── Arrows - Now positioned relatively within the content wrapper ─────────── */
 .horizontal-words__arrow-svg {
-  position: absolute;
-  bottom: 100%;
-  left: 0;
   width: 100%;
   max-width: 60em;
+  /* Removed absolute positioning - now flows naturally in flex layout */
   color: var(--color-dark);
   z-index: 2;
   opacity: 0.6;
+  /* Self-align to start (left in LTR, right in RTL) */
+  align-self: flex-start;
+  /* Ensure it doesn't grow/shrink unexpectedly */
   flex-shrink: 0;
 }
 
@@ -109,10 +109,12 @@
   z-index: 5;
   font-family: 'Tajawal', 'Epilogue', sans-serif;
   letter-spacing: 0;
-  direction: ltr !important;
-  text-align: center;
-  white-space: nowrap !important;
-  align-self: center;
+  direction: rtl;
+  text-align: right; /* Changed from center to right for RTL */
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: normal;
+  align-self: stretch; /* Take full width in flex container */
 }
 
 /* English headline */
@@ -132,10 +134,6 @@
 }
 
 /* Animated elements */
-.horizontal-words__word-wrapper {
-  display: inline-block !important;
-}
-
 .horizontal-words__letter,
 .horizontal-words__word {
   display: inline-block;
@@ -156,11 +154,9 @@
   letter-spacing: 0;
   opacity: 0.75;
   color: var(--color-dark);
-  text-align: center;
+  text-align: right; /* RTL alignment */
   margin-top: 0.4em;
-  align-self: center;
-  direction: ltr !important;
-  white-space: nowrap !important;
+  align-self: stretch;
 }
 
 .horizontal-words__underlay-en {

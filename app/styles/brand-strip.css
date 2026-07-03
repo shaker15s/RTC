@@ -50,6 +50,18 @@
   object-fit: contain;
 }
 
+/* Wordmark fallback — used while real partner SVGs aren't shipped */
+.brand-strip__wordmark {
+  font-family: 'Epilogue', 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  color: var(--color-dark);
+  text-align: center;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
 @media (max-width: 768px) {
   .brand-strip {
     padding: 40px 20px;

@@ -29,11 +29,15 @@ export default function BrandStrip() {
 
   return (
     <section className="brand-strip">
-      <p className="brand-strip__eyebrow">Our Partners & Allies in Success</p>
+      <p className="brand-strip__eyebrow" lang="ar" dir="rtl">شركاؤنا في النجاح</p>
       <div className="brand-strip__track">
-        {brands.map(({ name, src }) => (
+        {brands.map(({ name, wordmark, src }) => (
           <div key={name} className="brand-strip__item">
-            <img src={src} alt={name} className="brand-strip__logo" />
+            {src ? (
+              <img src={src} alt={name} className="brand-strip__logo" />
+            ) : (
+              <span className="brand-strip__wordmark" lang="en" dir="ltr">{wordmark}</span>
+            )}
           </div>
         ))}
       </div>

@@ -13,7 +13,7 @@
 }
 
 .apply-cta h2 {
-  font-family: 'Epilogue', sans-serif;
+  font-family: 'Tajawal', 'Epilogue', sans-serif;
   font-size: 3.5rem;
   font-weight: 800;
   color: var(--color-white);
@@ -39,9 +39,13 @@
 }
 
 .apply-cta__btn {
-  display: inline-block;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
   padding: 18px 40px;
-  font-family: 'Epilogue', sans-serif;
+  font-family: 'Tajawal', 'Epilogue', sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
   text-decoration: none;
@@ -51,6 +55,18 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
   letter-spacing: 0;
+  text-align: center;
+  min-width: 220px;
+}
+
+.apply-cta__btn-en {
+  font-family: 'Epilogue', 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  unicode-bidi: isolate;
 }
 
 .apply-cta__btn:hover {

@@ -55,8 +55,8 @@ export default function ApplyCTA() {
   return (
     <section className="apply-cta" ref={sectionRef}>
       <div className="apply-cta__content">
-        <h2>Your seat is waiting.</h2>
-        <p>
+        <h2 lang="ar" dir="rtl">مقعدك في انتظارك.</h2>
+        <p lang="en" dir="ltr">
           Open intake now. Free. Certified. One month from start to finish.
         </p>
         <div className="apply-cta__actions">
@@ -66,7 +66,8 @@ export default function ApplyCTA() {
             rel="noopener noreferrer"
             className="apply-cta__btn"
           >
-            Register on Facebook
+            <span lang="ar" dir="rtl">سجّل عبر فيسبوك</span>
+            <span className="apply-cta__btn-en" lang="en" dir="ltr">Register on Facebook</span>
           </a>
           <a
             href="https://wa.me/201115997937"
@@ -74,7 +75,8 @@ export default function ApplyCTA() {
             rel="noopener noreferrer"
             className="apply-cta__btn apply-cta__btn--secondary"
           >
-            Chat with RTC on WhatsApp
+            <span lang="ar" dir="rtl">تواصل عبر واتساب</span>
+            <span className="apply-cta__btn-en" lang="en" dir="ltr">Chat with RTC on WhatsApp</span>
           </a>
         </div>
       </div>

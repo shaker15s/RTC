@@ -7,9 +7,14 @@ import { IMPACT_STATS } from '@/lib/data';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const parseStat = (text) => {
+  const m = text.match(/^([\d.]+)\s*([KMB%]?)\s*(\+?)$/i);
+  if (!m) return { num: 0, suffix: '' };
+  return { num: parseFloat(m[1]), suffix: (m[2] || '') + (m[3] || '') };
+};
+
 export default function Showreel() {
   const sectionRef = useRef(null);
-  const statsRef = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -19,9 +24,7 @@ export default function Showreel() {
       items.forEach((item) => {
         const numEl = item.querySelector('.showreel__stat-value');
         const finalText = numEl?.dataset.value || '';
-        const numericMatch = finalText.match(/([\d.]+)\s*([KMB]?)/i);
-        const finalNum = numericMatch ? parseFloat(numericMatch[1]) : 0;
-        const suffix = numericMatch ? numericMatch[2] : '';
+        const { num: finalNum, suffix } = parseStat(finalText);
 
         ScrollTrigger.create({
           trigger: item,
@@ -34,13 +37,14 @@ export default function Showreel() {
               { y: 0, opacity: 1, duration: 1.1, ease: 'power3.out' }
             );
             const counter = { v: 0 };
+            const isInteger = Number.isInteger(finalNum);
             gsap.to(counter, {
               v: finalNum,
               duration: 1.8,
               ease: 'power2.out',
               onUpdate: () => {
                 if (numEl) {
-                  const display = Number.isInteger(finalNum)
+                  const display = isInteger
                     ? Math.round(counter.v).toString()
                     : counter.v.toFixed(1);
                   numEl.textContent = display + suffix;
@@ -75,21 +79,22 @@ export default function Showreel() {
     <section className="showreel-section" id="showreel-section" ref={sectionRef}>
       <div className="showreel__inner">
         <div className="showreel__intro">
-          <span className="showreel__eyebrow">by the numbers</span>
-          <h2 className="showreel__intro-title">
-            Twenty-five years of free.
-            <span className="showreel__intro-title-en">Measurable. Transparent. Free.</span>
+          <span className="showreel__eyebrow" lang="ar" dir="rtl">بالأرقام</span>
+          <h2 className="showreel__intro-title" lang="ar" dir="rtl">
+            خمسة وعشرون عاماً من العطاء المجاني.
+            <span className="showreel__intro-title-en" lang="en" dir="ltr">Measurable. Transparent. Free.</span>
           </h2>
         </div>
 
-        <div className="showreel__stats" ref={statsRef}>
+        <div className="showreel__stats">
           {IMPACT_STATS.map((stat, i) => (
             <div key={i} className="showreel__stat">
               <div className="showreel__stat-value" data-value={stat.value}>
                 0
               </div>
               <div className="showreel__stat-labels">
-                <span className="showreel__stat-label-en">{stat.label_en}</span>
+                <span className="showreel__stat-label-ar" lang="ar" dir="rtl">{stat.label_ar}</span>
+                <span className="showreel__stat-label-en" lang="en" dir="ltr">{stat.label_en}</span>
               </div>
             </div>
           ))}

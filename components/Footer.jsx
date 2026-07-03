@@ -19,6 +19,7 @@ function initWiggle(element, intensity) {
 export default function Footer() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
+    const cleanups = [];
 
     // Footer text entrance — staggered fade-up per column.
     gsap.fromTo(
@@ -96,10 +97,14 @@ export default function Footer() {
         const length = path.getTotalLength();
         gsap.set(path, { strokeDasharray: length, strokeDashoffset: 0 });
       });
-      const onEnter = () => gsap.fromTo(mapSvgPaths, { strokeDashoffset: (i, el) => el.getTotalLength() }, { strokeDashoffset: 0, duration: 0.5, ease: 'power2.out', stagger: 0.1, overwrite: true });
-      const onLeave = () => gsap.to(mapSvgPaths, { strokeDashoffset: 0, duration: 0.4, ease: 'power2.out', overwrite: true });
-      footerMapLink.addEventListener('mouseenter', onEnter);
-      footerMapLink.addEventListener('mouseleave', onLeave);
+      const onMapEnter = () => gsap.fromTo(mapSvgPaths, { strokeDashoffset: (i, el) => el.getTotalLength() }, { strokeDashoffset: 0, duration: 0.5, ease: 'power2.out', stagger: 0.1, overwrite: true });
+      const onMapLeave = () => gsap.to(mapSvgPaths, { strokeDashoffset: 0, duration: 0.4, ease: 'power2.out', overwrite: true });
+      footerMapLink.addEventListener('mouseenter', onMapEnter);
+      footerMapLink.addEventListener('mouseleave', onMapLeave);
+      cleanups.push(() => {
+        footerMapLink.removeEventListener('mouseenter', onMapEnter);
+        footerMapLink.removeEventListener('mouseleave', onMapLeave);
+      });
     }
 
     const creditsWrapper = document.querySelector('.footer-credits-wrapper');
@@ -119,7 +124,7 @@ export default function Footer() {
       gsap.set(creditsBox, { visibility: 'hidden', width: 0, height: 0, opacity: 0, y: startY });
       gsap.set(creditsItems, { y: boxHeight });
 
-      const onEnter = () => {
+      const onCreditsEnter = () => {
         gsap.set(creditsBox, { visibility: 'visible' });
         gsap.killTweensOf(creditsBox);
         gsap.killTweensOf(creditsItems);
@@ -127,15 +132,19 @@ export default function Footer() {
         gsap.to(creditsItems, { y: 0, duration: 0.5, stagger: 0.04, ease: 'power3.out', delay: 0.1 });
       };
 
-      const onLeave = () => {
+      const onCreditsLeave = () => {
         gsap.killTweensOf(creditsBox);
         gsap.killTweensOf(creditsItems);
         gsap.to(creditsBox, { width: 0, height: 0, opacity: 0, y: startY, duration: 0.35, ease: 'power3.in', onComplete: () => gsap.set(creditsBox, { visibility: 'hidden' }) });
         gsap.to(creditsItems, { y: boxHeight, duration: 0.4, ease: 'power3.in', stagger: -0.03, delay: 0.1 });
       };
 
-      creditsWrapper.addEventListener('mouseenter', onEnter);
-      creditsWrapper.addEventListener('mouseleave', onLeave);
+      creditsWrapper.addEventListener('mouseenter', onCreditsEnter);
+      creditsWrapper.addEventListener('mouseleave', onCreditsLeave);
+      cleanups.push(() => {
+        creditsWrapper.removeEventListener('mouseenter', onCreditsEnter);
+        creditsWrapper.removeEventListener('mouseleave', onCreditsLeave);
+      });
     }
 
     const footerStickers = gsap.utils.toArray('.footer-sticker');
@@ -153,33 +162,44 @@ export default function Footer() {
       scrollTrigger: { trigger: '.footer-stickers', start: 'top 80%', toggleActions: 'play none none reverse' }
     });
 
-    footerStickers.forEach((sticker, i) => {
-      const baseRotation = stickerRotations[i % stickerRotations.length] * 0.7;
-      const PROXIMITY_RADIUS = 180, STRENGTH = 4, MAX_PUSH = 55, MIN_SPEED = 3;
-      let prevX = 0, prevY = 0;
-      const clamp = (v, max) => Math.max(-max, Math.min(max, v));
+    const stickerStates = footerStickers.map((_, i) => ({
+      baseRotation: stickerRotations[i % stickerRotations.length] * 0.7,
+      prevX: 0,
+      prevY: 0,
+    }));
+    const PROXIMITY_RADIUS = 180;
+    const STRENGTH = 4;
+    const MAX_PUSH = 55;
+    const MIN_SPEED = 3;
+    const clamp = (v, max) => Math.max(-max, Math.min(max, v));
 
-      const onMove = (e) => {
-        const dx = e.clientX - prevX, dy = e.clientY - prevY;
-        prevX = e.clientX; prevY = e.clientY;
+    const onMove = (e) => {
+      footerStickers.forEach((sticker, i) => {
+        const state = stickerStates[i];
+        const dx = e.clientX - state.prevX;
+        const dy = e.clientY - state.prevY;
+        state.prevX = e.clientX;
+        state.prevY = e.clientY;
         const rect = sticker.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
         const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
         const onSticker = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
         const speed = Math.hypot(dx, dy);
-        const isOverCreditsBox = e.target.closest('.credits-box') !== null;
+        const isOverCreditsBox = e.target.closest && e.target.closest('.credits-box') !== null;
 
         if (!onSticker && !isOverCreditsBox && dist < PROXIMITY_RADIUS && speed > MIN_SPEED) {
-          const falloff = 1 - (dist / PROXIMITY_RADIUS);
+          const falloff = 1 - dist / PROXIMITY_RADIUS;
           const pushX = clamp(dx * STRENGTH * falloff, MAX_PUSH);
           const pushY = clamp(dy * STRENGTH * falloff, MAX_PUSH);
           gsap.killTweensOf(sticker);
-          gsap.to(sticker, { x: pushX, y: pushY, rotation: baseRotation + pushX * 0.25, duration: 0.18, ease: 'power3.out' });
-          gsap.to(sticker, { x: 0, y: 0, rotation: baseRotation, duration: 1.1, ease: 'elastic.out(1, 0.35)', delay: 0.18 });
+          gsap.to(sticker, { x: pushX, y: pushY, rotation: state.baseRotation + pushX * 0.25, duration: 0.18, ease: 'power3.out' });
+          gsap.to(sticker, { x: 0, y: 0, rotation: state.baseRotation, duration: 1.1, ease: 'elastic.out(1, 0.35)', delay: 0.18 });
         }
-      };
-      document.addEventListener('mousemove', onMove);
-    });
+      });
+    };
+    document.addEventListener('mousemove', onMove);
+    cleanups.push(() => document.removeEventListener('mousemove', onMove));
 
     const wiggleTargets = [
       { selector: '.footer-column:first-child h3', key: 'jobHeading' },
@@ -194,20 +214,21 @@ export default function Footer() {
 
     document.querySelectorAll('.single-social').forEach(el => initWiggle(el, WIGGLE_CONFIG.socials));
 
+    return () => cleanups.forEach((fn) => fn());
   }, []);
 
   return (
     <div className="footer-inner">
       <div className="footer-top">
         <div className="footer-column">
-          <span className="footer-badge">About the Center</span>
-          <h3>Resala Training Center<br />Nasr City</h3>
-          <address>
-            Nasr City, Cairo<br />
-            Abu Bakr Al-Siddiq, off Makram Ebeid Street
+          <span className="footer-badge" lang="ar" dir="rtl">عن المركز</span>
+          <h3>مركز رسالة التدريبي<br />مدينة نصر</h3>
+          <address lang="ar" dir="rtl">
+            مدينة نصر، القاهرة<br />
+            أبو بكر الصديق، متفرع من مكرم عبيد
           </address>
-          <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="footer-map-link">
-            <span>Find us on Google Maps</span>
+          <a href="https://www.google.com/maps/search/Resala+Charity+Association+Nasr+City" target="_blank" rel="noopener noreferrer" className="footer-map-link">
+            <span lang="ar" dir="rtl">موقعنا على خرائط جوجل</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 169 10" fill="none" className="draw-btn__svg">
               <path d="M1 6.5661C56.3941 3.06082 112.187 1.20095 168 0.999878" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25" />
               <path d="M32.1313 8.63371C68.2147 6.92799 104.462 6.13378 140.695 6.25107" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25" />
@@ -216,32 +237,32 @@ export default function Footer() {
         </div>
 
         <div className="footer-column">
-          <span className="footer-badge">Our Tracks</span>
-          <h3>What we teach, free</h3>
+          <span className="footer-badge" lang="ar" dir="rtl">مساراتنا</span>
+          <h3 lang="ar" dir="rtl">اللي بنعلمه، مجاناً</h3>
           <a href="https://www.facebook.com/RTC.Nasrcity" target="_blank" rel="noopener noreferrer" className="footer-email" style={{ fontSize: '1.4rem', fontWeight: 700 }}>
-            Engineering & PLC
+            الهندسة و PLC
           </a>
           <a href="https://www.facebook.com/RTC.Nasrcity" target="_blank" rel="noopener noreferrer" className="footer-email" style={{ fontSize: '1.4rem', fontWeight: 700 }}>
-            Computer Science & Web
+            علوم الحاسب والويب
           </a>
           <a href="https://www.facebook.com/RTC.Nasrcity" target="_blank" rel="noopener noreferrer" className="footer-email" style={{ fontSize: '1.4rem', fontWeight: 700 }}>
-            Languages & Soft Skills
+            اللغات والمهارات الناعمة
           </a>
-          <p className="footer-note" style={{ marginTop: '10px' }}>
-            Free. Certified. Every month.
+          <p className="footer-note" style={{ marginTop: '10px' }} lang="ar" dir="rtl">
+            مجاناً. بشهادة. كل شهر.
           </p>
         </div>
 
         <div className="footer-column">
-          <span className="footer-badge">Get In Touch</span>
-          <a href="https://www.facebook.com/RTC.Nasrcity" target="_blank" rel="noopener noreferrer" className="footer-email">
-            Register via Facebook
+          <span className="footer-badge" lang="ar" dir="rtl">تواصل معنا</span>
+          <a href="https://www.facebook.com/RTC.Nasrcity" target="_blank" rel="noopener noreferrer" className="footer-email" lang="ar" dir="rtl">
+            سجّل عبر فيسبوك
           </a>
-          <a href="https://wa.me/201115997937" target="_blank" rel="noopener noreferrer" className="footer-whatsapp">
-            Chat with RTC on WhatsApp
+          <a href="https://wa.me/201115997937" target="_blank" rel="noopener noreferrer" className="footer-whatsapp" lang="ar" dir="rtl">
+            تواصل مع RTC واتساب
           </a>
-          <p className="footer-note">
-            Hotline <strong style={{ color: 'var(--color-green)' }}>19450</strong> &mdash; registration open every month.
+          <p className="footer-note" lang="ar" dir="rtl">
+            الخط الساخن <strong style={{ color: 'var(--color-green)' }}>19450</strong> &mdash; باب التقديم مفتوح كل شهر.
           </p>
           <div className="footer-socials" id="footer-socials">
             {SOCIAL_ICONS.map(({ href, label, svg }) => (

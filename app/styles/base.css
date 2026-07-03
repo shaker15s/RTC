@@ -42,7 +42,7 @@ img, svg, video, canvas, audio, iframe, embed, object {
 /* ─── Base Elements ──────────────────────────────────────────────────────────── */
 body {
   background-color: var(--bg-color);
-  font-family: 'Epilogue', sans-serif;
+  font-family: 'Tajawal', 'Epilogue', sans-serif;
   color: var(--color-dark);
   overflow-x: hidden;
   scrollbar-width: none;
@@ -53,8 +53,7 @@ body {
 html {
   scrollbar-width: none;
   -ms-overflow-style: none;
-  direction: ltr;
-  text-align: left;
+  direction: rtl;
 }
 
 html::-webkit-scrollbar,

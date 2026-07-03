@@ -1,31 +1,41 @@
 'use client';
 
 import { useEffect } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
 
 export default function SmoothScroll() {
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    if (typeof window === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const lenis = {
+    const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       touchMultiplier: 1.5,
-    };
+    });
 
-    // Placeholder — Lenis instantiation removed for now
-    gsap.ticker.add((time) => { /* lenis.raf(time * 1000) */ });
-    gsap.ticker.lagSmoothing(0);
+    window.__lenis = lenis;
+
+    let rafId;
+    function raf(time) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+    rafId = requestAnimationFrame(raf);
 
     const originalTitle = document.title;
     const handleVisibility = () => {
-      document.title = document.hidden ? "Hey, over here! — RTC Nasr City" : originalTitle;
+      document.title = document.hidden
+        ? 'Hey, over here! — RTC Nasr City'
+        : originalTitle;
     };
     document.addEventListener('visibilitychange', handleVisibility);
 
     return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+      if (window.__lenis === lenis) window.__lenis = undefined;
       document.removeEventListener('visibilitychange', handleVisibility);
     };
   }, []);

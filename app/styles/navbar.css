@@ -45,6 +45,7 @@
   background: transparent;
   z-index: 1000;
   transition: color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  direction: ltr !important;
 }
 
 .navbar.on-dark {
@@ -144,10 +145,11 @@
   margin: 0;
 }
 
-/* --- Left Popout (Work) --- */
+/* --- Left Popout (Work) — opens rightward toward center */
 .nav-left .nav-popout {
   top: 8px;
-  left: -8px;
+  left: calc(100% + 8px);
+  right: auto;
   width: 340px;
   min-height: 520px;
 }
@@ -240,10 +242,11 @@
   cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
 }
 
-/* --- Right Popout (WhatsApp) --- */
+/* --- Right Popout (WhatsApp) — opens leftward toward center */
 .nav-right .nav-popout {
   top: 8px;
-  right: -8px;
+  right: calc(100% + 8px);
+  left: auto;
   width: 340px;
   min-height: 500px;
 }

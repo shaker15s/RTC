@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { DOUBLE_MARQUEE_VALUES } from '@/lib/data';
@@ -8,15 +8,22 @@ import { DOUBLE_MARQUEE_VALUES } from '@/lib/data';
 function shuffleArray(array) {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor((i + 1) * Math.abs(Math.sin((i * 9301 + 49297) % 233280 / 233280)));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
   return shuffled;
 }
 
 export default function DoubleMarquee() {
-  const [values, setValues] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
+
+  const tracks = useMemo(() => {
+    const shuffled = shuffleArray(DOUBLE_MARQUEE_VALUES);
+    return [
+      [...shuffled, ...shuffled],
+      [...shuffled, ...shuffled],
+    ];
+  }, []);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -24,33 +31,24 @@ export default function DoubleMarquee() {
     const mobile = window.matchMedia('(max-width: 768px)').matches;
     setIsMobile(mobile);
 
-    const shuffled = shuffleArray(DOUBLE_MARQUEE_VALUES);
-    const tracks = [
-      [...shuffled, ...shuffled],
-      [...shuffled, ...shuffled],
-    ];
-    setValues(tracks);
+    const ctx = gsap.context(() => {
+      gsap.set('.marquee-left .marquee-svg-item:nth-child(2) path', { strokeDashoffset: 1000 });
 
-    gsap.set('.marquee-left .marquee-svg-item:nth-child(2) path', { strokeDashoffset: 1000 });
+      const marqueeTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.Double-marquee',
+          start: 'top 70%',
+          toggleActions: 'play none none reverse',
+        },
+      });
 
-    const marqueeTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '.Double-marquee',
-        start: 'top 70%',
-        toggleActions: 'play none none reverse',
-      },
+      marqueeTl
+        .to('.marquee-underline', { scaleX: 1, opacity: 1, duration: 1, ease: 'power2.out' })
+        .to('.marquee-left .marquee-svg-item:nth-child(1)', { scale: 1, opacity: 1, rotation: -10, duration: 0.6, ease: 'back.out(1.7)' }, '-=0.5')
+        .to('.marquee-left .marquee-svg-item:nth-child(2) path', { strokeDashoffset: 0, duration: 1.5, ease: 'power2.out' }, '-=0.3');
     });
 
-    marqueeTl
-      .to('.marquee-underline', { scaleX: 1, opacity: 1, duration: 1, ease: 'power2.out' })
-      .to('.marquee-left .marquee-svg-item:nth-child(1)', { scale: 1, opacity: 1, rotation: -10, duration: 0.6, ease: 'back.out(1.7)' }, '-=0.5')
-      .to('.marquee-left .marquee-svg-item:nth-child(2) path', { strokeDashoffset: 0, duration: 1.5, ease: 'power2.out' }, '-=0.3');
-
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => {
-        if (t.vars.trigger === '.Double-marquee') t.kill();
-      });
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
@@ -60,6 +58,7 @@ export default function DoubleMarquee() {
           <h2>
             Our Core <span className="text-with">Values:</span>
           </h2>
+          {/* Underline arrow */}
           <svg xmlns="http://www.w3.org/2000/svg" className="marquee-underline" viewBox="0 0 132 5" fill="none">
             <path d="M1 2.08377C44.3458 3.90451 87.9791 5.71442 131 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -81,7 +80,7 @@ export default function DoubleMarquee() {
       </div>
 
       <div className="marquee-right">
-        {values.map((trackItems, colIndex) => (
+        {tracks.map((trackItems, colIndex) => (
           <div key={colIndex} className="marquee-column">
             <div className="marquee-track">
               {trackItems.map((item, i) => (
@@ -91,7 +90,9 @@ export default function DoubleMarquee() {
                   style={{ backgroundColor: item.color }}
                 >
                   <div className="marquee-value-wrapper">
-                    <span className="marquee-value-en">{item.value_en}</span>
+                    <span className="marquee-value-ar" lang="ar" dir="rtl">{item.value_ar}</span>
+                    <span className="marquee-value-sep" aria-hidden="true">·</span>
+                    <span className="marquee-value-en" lang="en" dir="ltr">{item.value_en}</span>
                   </div>
                 </div>
               ))}
