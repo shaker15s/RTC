@@ -36,15 +36,18 @@ const HorizontalWords = () => {
     const ctx = gsap.context(() => {
       const container = sectionRef.current;
 
-      // ── MOBILE: simple fade-in, no horizontal scroll, no pin ──
+      // ── MOBILE: impressive staggered word reveal, no horizontal scroll ──
       if (isMobile) {
+        // Arabic words: each word springs up from below with bounce
+        const words = container.querySelectorAll('.horizontal-words__word');
         gsap.fromTo(
-          container.querySelectorAll('.horizontal-words__h2, .horizontal-words__headline-en'),
-          { opacity: 0, y: 40 },
+          words,
+          { opacity: 0, y: 80, rotation: () => (Math.random() - 0.5) * 20, scale: 0.6 },
           {
-            opacity: 1, y: 0,
-            duration: 1, ease: 'power3.out',
-            stagger: 0.15,
+            opacity: 1, y: 0, rotation: 0, scale: 1,
+            duration: 0.9,
+            ease: 'elastic.out(1, 0.5)',
+            stagger: { each: 0.12, from: 'start' },
             scrollTrigger: {
               trigger: container,
               start: 'top 80%',
@@ -52,25 +55,51 @@ const HorizontalWords = () => {
             },
           }
         );
+
+        // English letters: fly in from random vertical offsets
+        const letters = container.querySelectorAll('.horizontal-words__letter');
+        gsap.fromTo(
+          letters,
+          {
+            opacity: 0,
+            y: () => (Math.random() - 0.5) * 80,
+            rotation: () => (Math.random() - 0.5) * 30,
+          },
+          {
+            opacity: 1, y: 0, rotation: 0,
+            duration: 0.7,
+            ease: 'back.out(1.4)',
+            stagger: { each: 0.03, from: 'start' },
+            delay: 0.5,
+            scrollTrigger: {
+              trigger: container,
+              start: 'top 80%',
+              once: true,
+            },
+          }
+        );
+
+        // Underlay + bottom text fade in after headline
         gsap.fromTo(
           container.querySelectorAll(
-            '.horizontal-words__underlay, .horizontal-words__underlay-en, .horizontal-words__bottom-text-l, .horizontal-words__bottom-text-en, .horizontal-words__headline-en'
+            '.horizontal-words__underlay, .horizontal-words__underlay-en, .horizontal-words__bottom-text-l, .horizontal-words__bottom-text-en'
           ),
           { opacity: 0, y: 20 },
           {
             opacity: 1, y: 0,
-            duration: 0.9, ease: 'power3.out',
+            duration: 0.7, ease: 'power3.out',
             stagger: 0.1,
-            delay: 0.3,
+            delay: 1.2,
             scrollTrigger: {
               trigger: container,
-              start: 'top 75%',
+              start: 'top 80%',
               once: true,
             },
           }
         );
         return; // Exit — no desktop animations on mobile
       }
+
 
       // ── DESKTOP: full horizontal scroll with pin ──
       const textRef = container.querySelector('.horizontal-words__content-wrapper');
