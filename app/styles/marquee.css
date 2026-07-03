@@ -284,7 +284,8 @@
     flex-direction: column;
     gap: 20px;
     min-height: unset;
-    overflow: hidden;
+    /* no overflow:hidden — marquee-right uses full-bleed and manages its own clip */
+    overflow: visible;
   }
 
   /* Left panel — text with padding */

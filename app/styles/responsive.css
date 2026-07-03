@@ -391,6 +391,19 @@
 
 /* ─── Mobile (≤ 768px) ───────────────────────────────────────────────────── */
 @media (max-width: 768px) {
+
+  /* ── overflow guard ── */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* ── touch: disable custom SVG cursor ── */
+  *, *::before, *::after {
+    cursor: auto !important;
+  }
+
+  /* ── Navbar ── */
   .navbar {
     padding: 14px 16px;
   }
@@ -400,26 +413,27 @@
   }
 
   .logo-work-container {
-    width: 48px;
-    height: 44px;
+    width: 44px;
+    height: 40px;
   }
 
   .logo-work-text {
-    font-size: 1.4rem;
-    margin-left: 52px;
+    font-size: 1.2rem;
+    margin-left: 48px;
   }
 
   .nav-bar__whatsapp-svg {
     width: 26px;
   }
 
+  /* ── Content sections ── */
   .content-section {
-    padding: 80px 0 0;
+    padding: 60px 0 0;
     overflow: visible;
   }
 
   .main-title {
-    font-size: 3rem;
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
     letter-spacing: 0;
   }
 
@@ -429,130 +443,45 @@
   }
 
   .title-container {
-    margin-bottom: 50px;
+    margin-bottom: 32px;
+    padding: 0 16px;
+  }
+
+  /* ── ServiceCards: vertical stack — NO giant padding-bottom ── */
+  .service-cards-wrapper {
+    padding-bottom: 20px !important;
   }
 
   .cards-wrapper {
     position: relative !important;
-    display: block !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
     width: 100% !important;
+    height: auto !important;
+    min-height: unset !important;
     margin: 0 auto !important;
+    padding: 0 16px !important;
+    gap: 20px !important;
     overflow: visible !important;
-  }
-
-  /* After the mobile pin releases, give the wrapper enough trailing space
-     so the 4th card stays visible above the next section. */
-  .service-cards-wrapper {
-    padding-bottom: calc(100vh + 200px) !important;
   }
 
   .card {
     position: relative !important;
     left: auto !important;
     top: auto !important;
-    width: 82vw;
-    max-width: 340px;
-    min-height: 420px;
-    height: auto;
+    transform: none !important;
+    width: min(82vw, 340px) !important;
+    max-width: 340px !important;
+    height: auto !important;
+    min-height: unset !important;
   }
 
   .card-sticker {
     pointer-events: none;
   }
 
-  .Double-marquee {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 60px 24px 0;
-    gap: 0;
-    min-height: unset;
-  }
-
-  .marquee-left {
-    max-width: 100%;
-    width: 100%;
-    justify-content: flex-start;
-    align-items: flex-start;
-    min-height: 340px;
-  }
-
-  .marquee-text-container {
-    text-align: left;
-  }
-
-  .marquee-left h2 {
-    font-size: 2.6rem;
-    letter-spacing: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-  }
-
-  .marquee-blob-container {
-    width: 240px;
-    height: 280px;
-    top: 45%;
-    left: 20%;
-  }
-
-  .marquee-svg-item:nth-child(1) {
-    width: 60px;
-    bottom: 10%;
-    left: 55%;
-  }
-
-  .marquee-svg-item:nth-child(2) {
-    width: 220px;
-    bottom: -5%;
-    left: 55%;
-  }
-
-  .marquee-underline {
-    top: 5rem;
-    left: 9.5rem;
-    width: 70px;
-  }
-
-  .marquee-right {
-    display: grid;
-    grid-template-rows: 130px 130px;
-    grid-auto-flow: column;
-    grid-auto-columns: 130px;
-    gap: 8px;
-    width: 100%;
-    height: auto;
-    margin-left: 0;
-    padding: 20px 24px 32px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .marquee-right::-webkit-scrollbar {
-    display: none;
-  }
-
-  .marquee-column {
-    display: contents;
-  }
-
-  .marquee-column::before,
-  .marquee-column::after {
-    display: none;
-  }
-
-  .marquee-column:nth-child(1) .marquee-track,
-  .marquee-column:nth-child(2) .marquee-track {
-    display: contents;
-    animation: none;
-  }
-
-  .marquee-item {
-    width: 130px;
-    height: 130px;
-    flex-shrink: 0;
-  }
-
+  /* ── Footer ── */
   .main-footer {
     padding: 6px;
   }
@@ -593,41 +522,41 @@
   .sticker-boom {
     left: 2%;
     bottom: 10%;
-    width: 90px;
+    width: 70px;
   }
 
   .sticker-smile {
     left: 30%;
     bottom: 5%;
-    width: 90px;
+    width: 70px;
   }
 
   .sticker-heart {
     left: 50%;
     bottom: 18%;
-    width: 85px;
+    width: 68px;
   }
 
   .footer-sticker.sticker-hands {
     left: 60%;
     bottom: 2%;
-    width: 90px;
+    width: 70px;
   }
 
   .footer-sticker.sticker-100 {
     left: 72%;
     bottom: 20%;
-    width: 80px;
+    width: 62px;
   }
 
   .footer-sticker.sticker-camera {
     right: 2%;
     bottom: 8%;
-    width: 85px;
+    width: 66px;
   }
 
   .footer-bottom {
-    margin-top: 200px;
+    margin-top: 60px;
   }
 
   .footer-logo__svg {
@@ -657,6 +586,7 @@
     font-size: 0.95rem;
   }
 }
+
 
 /* ─── Small phones (≤ 380px) — safe zone for 360px viewports ────────────── */
 @media (max-width: 380px) {
