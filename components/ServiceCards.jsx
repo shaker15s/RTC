@@ -261,11 +261,13 @@ function initCardAnimations() {
     const cardsWrapper = document.querySelector('.cards-wrapper');
     if (!cardsWrapper) return;
 
-    // Reset all cards to natural flow — CSS handles width/layout
-    cards.forEach((card, i) => {
-      gsap.set(card, {
-        clearProps: 'all',
-      });
+    // Clear any GSAP inline styles from the wrapper itself
+    cardsWrapper.removeAttribute('style');
+    gsap.set(cardsWrapper, { clearProps: 'all' });
+
+    // Reset all cards to natural CSS flow
+    cards.forEach((card) => {
+      gsap.set(card, { clearProps: 'all' });
     });
 
     // Simple staggered reveal animation per card

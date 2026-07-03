@@ -216,3 +216,14 @@
   opacity: 1;
   width: 60px;
 }
+
+@media (max-width: 768px) {
+  .showreel-section {
+    min-height: auto !important;
+    height: auto !important;
+  }
+  .showreel__inner {
+    padding: 4rem 1.5rem !important;
+    gap: 2.5rem !important;
+  }
+}

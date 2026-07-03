@@ -325,24 +325,10 @@
     padding: 0;
   }
 
-  /* Fade edges */
+  /* Fade edges removed on mobile to avoid fake center white lines */
   .marquee-right::before,
   .marquee-right::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 60px;
-    z-index: 3;
-    pointer-events: none;
-  }
-  .marquee-right::before {
-    left: 0;
-    background: linear-gradient(to right, var(--bg-color) 0%, transparent 100%);
-  }
-  .marquee-right::after {
-    right: 0;
-    background: linear-gradient(to left, var(--bg-color) 0%, transparent 100%);
+    display: none !important;
   }
 
   /* Hide second column on mobile — one horizontal strip is enough */
