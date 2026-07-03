@@ -260,58 +260,35 @@ function initCardAnimations() {
   const buildMobile = () => {
     const cardsWrapper = document.querySelector('.cards-wrapper');
     if (!cardsWrapper) return;
-    const scrollPerCard = window.innerHeight * 0.8;
-    const navH = 60;
-    const mobileRotations = [-6, 4, -8, 5];
 
+    // Reset all cards to natural flow — CSS handles width/layout
     cards.forEach((card, i) => {
       gsap.set(card, {
-        position: 'absolute',
-        left: '50%',
-        top: '0',
-        xPercent: -50,
-        y: i === 0 ? 0 : window.innerHeight * 1.1,
-        rotation: mobileRotations[i % mobileRotations.length],
-        zIndex: i + 1,
-        transformOrigin: 'center center',
+        clearProps: 'all',
       });
     });
 
-    const wrapperH = window.innerHeight * 0.7 + scrollPerCard * (cards.length - 1);
-    gsap.set(cardsWrapper, { height: wrapperH });
-
-    mobileTriggers.push(
-      ScrollTrigger.create({
-        trigger: cardsWrapper,
-        start: `top ${navH}px`,
-        end: `+=${scrollPerCard * (cards.length - 1)}`,
-        pin: true,
-        pinSpacing: true,
-        id: 'mobile-cards-pin',
-      })
-    );
-
+    // Simple staggered reveal animation per card
     cards.forEach((card, i) => {
-      if (i === 0) return;
-      const t = gsap.fromTo(
+      gsap.fromTo(
         card,
-        { y: window.innerHeight * 1.1, rotation: mobileRotations[i] },
+        { opacity: 0, y: 60, rotation: i % 2 === 0 ? -4 : 4 },
         {
+          opacity: 1,
           y: 0,
           rotation: 0,
+          duration: 0.8,
           ease: 'power3.out',
           scrollTrigger: {
-            trigger: cardsWrapper,
-            start: `top+=${(i - 1) * scrollPerCard} ${navH}px`,
-            end: `top+=${i * scrollPerCard} ${navH}px`,
-            scrub: 0.4,
-            onLeave: () => gsap.set(card, { y: 0, rotation: 0 }),
+            trigger: card,
+            start: 'top 88%',
+            once: true,
           },
         }
       );
-      mobileTriggers.push(t.scrollTrigger);
     });
   };
+
 
   /* ── apply mode ── */
   const apply = () => {

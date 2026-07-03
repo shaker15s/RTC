@@ -279,24 +279,119 @@
 
 @media (max-width: 768px) {
   .Double-marquee {
-    padding: 40px 20px;
+    padding: 40px 0 50px;
+    flex-direction: column;
+    gap: 24px;
+    min-height: unset;
+    overflow: hidden;
+  }
+
+  /* Left panel — text with padding */
+  .marquee-left {
+    width: 100%;
+    padding: 0 24px;
+    max-width: 100%;
+    min-height: unset;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
   }
 
   .marquee-left h2 {
-    font-size: 2.5rem;
+    font-size: clamp(2rem, 7vw, 2.8rem);
+    margin-bottom: 8px;
+    margin-left: 0;
+    letter-spacing: 0;
   }
 
   .text-with {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
+  /* Hide vertical columns entirely on mobile */
   .marquee-right {
-    height: 400px;
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-left: 0;
+    padding: 0;
+    overflow: hidden; /* clip to section width */
+    position: relative;
   }
 
+  /* Fade edges */
+  .marquee-right::before,
+  .marquee-right::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 60px;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .marquee-right::before {
+    left: 0;
+    background: linear-gradient(to right, var(--bg-color) 0%, transparent 100%);
+  }
+  .marquee-right::after {
+    right: 0;
+    background: linear-gradient(to left, var(--bg-color) 0%, transparent 100%);
+  }
+
+  /* Hide second column on mobile — one horizontal strip is enough */
+  .marquee-column:nth-child(2) {
+    display: none;
+  }
+
+  /* First column becomes horizontal scrolling strip */
+  .marquee-column:nth-child(1) {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .marquee-column::before,
+  .marquee-column::after {
+    display: none; /* remove vertical fades */
+  }
+
+  /* Horizontal marquee track */
+  .marquee-track {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 12px !important;
+    width: max-content;
+    animation: marqueeHorizontal 18s linear infinite !important;
+  }
+
+  @keyframes marqueeHorizontal {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Each card becomes a horizontal pill */
   .marquee-item {
-    width: 130px;
-    height: 130px;
+    width: 160px !important;
+    min-width: 160px;
+    height: 120px !important;
+    aspect-ratio: unset;
+    min-height: unset !important;
+    flex-shrink: 0;
+    border-radius: 14px;
+  }
+
+  .marquee-value-ar {
+    font-size: 1.1rem;
+  }
+
+  .marquee-value-en {
+    font-size: 0.75rem;
+  }
+
+  /* Blob hidden on mobile */
+  .marquee-blob-container {
+    display: none;
   }
 }
 
@@ -305,3 +400,4 @@
     animation: none !important;
   }
 }
+

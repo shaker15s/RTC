@@ -327,3 +327,28 @@
   stroke-dashoffset: 0;
   transition-delay: 0.15s;
 }
+
+/* ─── Mobile: hide hover popouts, simplify navbar ──────────────────────────── */
+@media (max-width: 768px) {
+  .nav-popout {
+    display: none !important;
+  }
+
+  .nav-overlay {
+    display: none !important;
+  }
+
+  .logo-work-container {
+    width: 40px;
+    height: 36px;
+  }
+
+  .logo-work-text {
+    font-size: 1.1rem;
+    margin-left: 44px;
+  }
+
+  .nav-bar__whatsapp-svg {
+    width: 24px;
+  }
+}

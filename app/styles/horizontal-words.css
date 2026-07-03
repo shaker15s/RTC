@@ -213,3 +213,72 @@
   color: var(--color-dark);
   text-align: center;
 }
+
+/* ─── Mobile: disable horizontal scroll, vertical centered layout ──────────── */
+@media (max-width: 768px) {
+  .horizontal-words-section {
+    height: auto;
+    min-height: 100svh;
+    overflow: hidden;
+    padding: 80px 24px 60px;
+    justify-content: center;
+  }
+
+  .horizontal-words__content-wrapper {
+    position: relative !important;
+    max-width: 100%;
+    padding-inline: 0;
+    align-items: center;
+    gap: 0.6em;
+    /* Let GSAP control x/transform — don't override with none */
+  }
+
+  .horizontal-words__h2 {
+    font-size: clamp(2rem, 9vw, 3.5rem);
+    white-space: normal !important;
+    text-align: center;
+    line-height: 1.25;
+  }
+
+  .horizontal-words__headline-en {
+    font-size: clamp(1rem, 4vw, 1.5rem);
+    white-space: normal !important;
+    text-align: center;
+  }
+
+  .horizontal-words__underlay {
+    font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+    white-space: normal !important;
+    text-align: center;
+    margin-top: 0.6em;
+  }
+
+  .horizontal-words__underlay-en {
+    font-size: clamp(0.75rem, 3vw, 0.95rem);
+    text-align: center;
+  }
+
+  /* Hide arrows and stickers on mobile — too cluttered */
+  .horizontal-words__arrow-svg,
+  .horizontal-words__arrow-end-svg {
+    display: none;
+  }
+
+  .horizontal-words__sticker-svg {
+    display: none;
+  }
+
+  .horizontal-words__bottom-text {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    margin-top: 2em;
+    width: 100%;
+  }
+
+  .horizontal-words__bottom-text-l {
+    font-size: clamp(0.85rem, 3.5vw, 1rem);
+    text-align: center;
+  }
+}

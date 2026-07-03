@@ -356,11 +356,12 @@
 /* ─── Responsive: Mobile (≤ 768px) ────────────────────────────────────────── */
 @media (max-width: 768px) {
   .motion-card-section {
-    padding: 80px 20px 60px;
+    padding: 60px 20px 40px;
+    overflow: hidden;
   }
 
   .motion-card__heading {
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     padding: 0 8px;
   }
 
@@ -387,6 +388,16 @@
   .motion-card__sticker--top svg {
     width: 50px;
     height: 50px;
+  }
+
+  /* Hide blob — overflows off-screen on mobile */
+  .motion-card__blob {
+    display: none;
+  }
+
+  .motion-card__cards-area {
+    height: auto;
+    margin: 20px auto 40px;
   }
 
   .motion-card__cards {

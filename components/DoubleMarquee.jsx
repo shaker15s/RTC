@@ -20,8 +20,9 @@ export default function DoubleMarquee() {
   const tracks = useMemo(() => {
     const shuffled = shuffleArray(DOUBLE_MARQUEE_VALUES);
     return [
-      [...shuffled, ...shuffled],
-      [...shuffled, ...shuffled],
+      // 4 copies for seamless horizontal loop on mobile (translateX(-50%) needs 2x minimum)
+      [...shuffled, ...shuffled, ...shuffled, ...shuffled],
+      [...shuffled, ...shuffled, ...shuffled, ...shuffled],
     ];
   }, []);
 
@@ -81,7 +82,10 @@ export default function DoubleMarquee() {
 
       <div className="marquee-right">
         {tracks.map((trackItems, colIndex) => (
-          <div key={colIndex} className="marquee-column">
+          <div
+            key={colIndex}
+            className={`marquee-column ${colIndex === 0 ? 'marquee-column--up' : 'marquee-column--down'}`}
+          >
             <div className="marquee-track">
               {trackItems.map((item, i) => (
                 <div

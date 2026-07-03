@@ -31,8 +31,48 @@ const HorizontalWords = () => {
   const sectionRef = useRef(null);
 
   useEffect(() => {
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
     const ctx = gsap.context(() => {
       const container = sectionRef.current;
+
+      // ── MOBILE: simple fade-in, no horizontal scroll, no pin ──
+      if (isMobile) {
+        gsap.fromTo(
+          container.querySelectorAll('.horizontal-words__h2, .horizontal-words__headline-en'),
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1, y: 0,
+            duration: 1, ease: 'power3.out',
+            stagger: 0.15,
+            scrollTrigger: {
+              trigger: container,
+              start: 'top 80%',
+              once: true,
+            },
+          }
+        );
+        gsap.fromTo(
+          container.querySelectorAll(
+            '.horizontal-words__underlay, .horizontal-words__underlay-en, .horizontal-words__bottom-text-l, .horizontal-words__bottom-text-en, .horizontal-words__headline-en'
+          ),
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1, y: 0,
+            duration: 0.9, ease: 'power3.out',
+            stagger: 0.1,
+            delay: 0.3,
+            scrollTrigger: {
+              trigger: container,
+              start: 'top 75%',
+              once: true,
+            },
+          }
+        );
+        return; // Exit — no desktop animations on mobile
+      }
+
+      // ── DESKTOP: full horizontal scroll with pin ──
       const textRef = container.querySelector('.horizontal-words__content-wrapper');
 
       // Start off-screen (right side)
@@ -188,6 +228,7 @@ const HorizontalWords = () => {
 
     return () => ctx.revert();
   }, []);
+
 
   return (
     <section ref={sectionRef} className="horizontal-words-section content-section">
