@@ -398,11 +398,6 @@
     max-width: 100vw;
   }
 
-  /* ── touch: disable custom SVG cursor ── */
-  *, *::before, *::after {
-    cursor: auto !important;
-  }
-
   /* ── Navbar ── */
   .navbar {
     padding: 14px 16px;

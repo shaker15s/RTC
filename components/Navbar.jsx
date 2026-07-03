@@ -107,7 +107,9 @@ export default function Navbar() {
       gsap.set(workItems, { y: 10, opacity: 0 });
       gsap.set(workBlob, { transformOrigin: 'center center' });
 
+      let isLeftOpen = false;
       const onEnterLeft = () => {
+        isLeftOpen = true;
         gsap.killTweensOf(workBox);
         gsap.killTweensOf(workItems);
         gsap.killTweensOf(workBlob);
@@ -119,6 +121,7 @@ export default function Navbar() {
       };
 
       const onLeaveLeft = () => {
+        isLeftOpen = false;
         gsap.killTweensOf(workBox);
         gsap.killTweensOf(workItems);
         gsap.killTweensOf(workBlob);
@@ -135,11 +138,20 @@ export default function Navbar() {
         });
       };
 
-      navLeft.addEventListener('mouseenter', onEnterLeft);
-      navLeft.addEventListener('mouseleave', onLeaveLeft);
+      const onLeftClick = (e) => {
+        if (window.innerWidth <= 768) {
+          if (isLeftOpen) onLeaveLeft();
+          else onEnterLeft();
+        }
+      };
+
+      navLeft.addEventListener('mouseenter', (e) => { if (window.innerWidth > 768) onEnterLeft(); });
+      navLeft.addEventListener('mouseleave', (e) => { if (window.innerWidth > 768) onLeaveLeft(); });
+      navLeft.addEventListener('click', onLeftClick);
       cleanups.push(() => {
         navLeft.removeEventListener('mouseenter', onEnterLeft);
         navLeft.removeEventListener('mouseleave', onLeaveLeft);
+        navLeft.removeEventListener('click', onLeftClick);
       });
     }
 
@@ -167,7 +179,9 @@ export default function Navbar() {
       });
       gsap.set(waItems, { y: 10, opacity: 0 });
 
+      let isRightOpen = false;
       const onEnterRight = () => {
+        isRightOpen = true;
         gsap.killTweensOf(waBox);
         gsap.killTweensOf(waItems);
         showOverlay();
@@ -178,6 +192,7 @@ export default function Navbar() {
       };
 
       const onLeaveRight = () => {
+        isRightOpen = false;
         gsap.killTweensOf(waBox);
         gsap.killTweensOf(waItems);
         hideOverlay();
@@ -193,11 +208,20 @@ export default function Navbar() {
         });
       };
 
-      navRight.addEventListener('mouseenter', onEnterRight);
-      navRight.addEventListener('mouseleave', onLeaveRight);
+      const onRightClick = (e) => {
+        if (window.innerWidth <= 768) {
+          if (isRightOpen) onLeaveRight();
+          else onEnterRight();
+        }
+      };
+
+      navRight.addEventListener('mouseenter', (e) => { if (window.innerWidth > 768) onEnterRight(); });
+      navRight.addEventListener('mouseleave', (e) => { if (window.innerWidth > 768) onLeaveRight(); });
+      navRight.addEventListener('click', onRightClick);
       cleanups.push(() => {
         navRight.removeEventListener('mouseenter', onEnterRight);
         navRight.removeEventListener('mouseleave', onLeaveRight);
+        navRight.removeEventListener('click', onRightClick);
       });
     }
 
